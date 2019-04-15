@@ -143,7 +143,7 @@ int main()
         //get interface and gateway for next hop
         char interface[16];
         char gateway[16];
-	if(inet_addr(d_ip)==inet_addr("239.255.255.0")){
+	if(inet_addr(d_ip)==inet_addr("239.255.255.250")){
             cout<<"multicast address"<<endl;
             continue;
         }
