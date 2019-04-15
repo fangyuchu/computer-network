@@ -143,6 +143,10 @@ int main()
         //get interface and gateway for next hop
         char interface[16];
         char gateway[16];
+	if(inet_addr(d_ip)==inet_addr("239.255.255.0")){
+            cout<<"multicast address"<<endl;
+            continue;
+        }
         for(int i=0;i<route_item_index;i++){
             if((inet_addr(d_ip)&inet_addr(route_info[i].netmask))==inet_addr(route_info[i].destination)){
                 //route founded
