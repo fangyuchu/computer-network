@@ -125,6 +125,9 @@ int main()
         if(ethhead->h_proto==htons(0x0806)){
             cout<<"arp"<<endl;
             continue;
+        }else if(ethhead->h_proto==htons(0x86dd)){
+            cout<<"ipv6"<<endl;
+            continue;
         }
 
         //aquire source and destination ip
