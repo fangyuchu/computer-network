@@ -101,15 +101,19 @@ int main()
 
 	int sockfd;
 	int n_read;
-    if ((sockfd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))) < 0) {
+    //if ((sockfd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))) < 0) {
+    if ((sockfd = socket(AF_PACKET, SOCK_RAW, htons(0x0800))) < 0) {
 		cout<<"error create raw socket"<<endl;
 		return -1;
 	}
+
+	/***********************
     int sock_send;
     if ((sock_send = socket(AF_PACKET, SOCK_RAW, htons(0x0800))) < 0) {
         cout<<"Error: could not open socket\n";
         return -1;
     }
+    *************************/
 
 	while(1){
         int src_addr_len = sizeof(struct sockaddr_in);
@@ -201,9 +205,9 @@ int main()
         memset(&buffer, 0x00, sizeof(buffer));
         strncpy(buffer.ifr_name, interface, IFNAMSIZ);
         //get index of interface
-        if (ioctl(sock_send, SIOCGIFINDEX, &buffer) < 0) {
+        if (ioctl(sockfd, SIOCGIFINDEX, &buffer) < 0) {
             cout<<"Error: could not get interface index"<<endl;
-            close(sock_send);
+            close(sockfd);
             return -1;
         }
         int interface_index;
@@ -216,13 +220,13 @@ int main()
         saddrll.sll_halen = ETH_ALEN;
         memcpy(saddrll.sll_addr, ethhead->h_dest, ETH_ALEN);
 
-        int err_msg=sendto(sock_send, recvbuf, frame_len, 0, (struct sockaddr*)&saddrll, sizeof(saddrll));
+        int err_msg=sendto(sockfd, recvbuf, frame_len, 0, (struct sockaddr*)&saddrll, sizeof(saddrll));
         if ( err_msg> 0){
             cout<<"Success!\n";
             cout<<"source ip:"<<s_ip<<endl;
             cout<<"destination ip:"<<d_ip<<endl;
             //close(sock_send);
-            sleep(1);
+            //sleep(1);
         }
         else{
             cout<<"Error, could not send\n"<<"Error Message:"<<errno<<endl;
